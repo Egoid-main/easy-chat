@@ -6,7 +6,7 @@ import { getGemini, DEFAULT_MODEL, logUsage } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 30;
+export const maxDuration = 60; // Hobby 플랜 한도
 
 export async function POST(req: NextRequest) {
   let body: SummaryRequestBody;
@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
       ],
       config: {
         systemInstruction,
-        // 테스트 기간: 실질 무제한. 평균 소비량 측정 후 다시 조정.
-        maxOutputTokens: 2000,
+        // gemini-2.5-flash 출력 한도(65,536)에 맞춰 사실상 무제한.
+        maxOutputTokens: 65536,
         temperature: 0.3,
       },
     });

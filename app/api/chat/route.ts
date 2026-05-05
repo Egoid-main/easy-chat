@@ -12,7 +12,7 @@ import {
 
 export const runtime = "nodejs"; // Google GenAI SDK 사용
 export const dynamic = "force-dynamic";
-export const maxDuration = 30; // Vercel: 모델 응답 지연 대비
+export const maxDuration = 60; // Vercel: 모델 응답 지연 대비 (Hobby 플랜 한도)
 
 /** 토큰 절감: 최근 N턴까지만 모델에 전달 */
 const MAX_RECENT_MESSAGES = 8;
@@ -73,8 +73,9 @@ export async function POST(req: NextRequest) {
       contents,
       config: {
         systemInstruction,
-        // 테스트 기간: 실질 무제한. 평균 소비량 측정 후 다시 조정.
-        maxOutputTokens: 4000,
+        // gemini-2.5-flash 출력 한도(65,536)에 맞춰 사실상 무제한.
+        // thinking 토큰도 이 한도에 같이 잡히는 점 유의.
+        maxOutputTokens: 65536,
         temperature: 0.7,
       },
     });
