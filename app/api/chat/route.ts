@@ -7,6 +7,7 @@ import {
   DEFAULT_MODEL,
   extractMeta,
   toGeminiContents,
+  logUsage,
 } from "@/lib/gemini";
 
 export const runtime = "nodejs"; // Google GenAI SDK 사용
@@ -66,12 +67,14 @@ export async function POST(req: NextRequest) {
 
   try {
     const ai = getGemini();
+    const startedAt = Date.now();
     const completion = await ai.models.generateContent({
       model: DEFAULT_MODEL,
       contents,
       config: {
         systemInstruction,
-        maxOutputTokens: 600,
+        // 테스트 기간: 실질 무제한. 평균 소비량 측정 후 다시 조정.
+        maxOutputTokens: 4000,
         temperature: 0.7,
       },
     });
@@ -79,6 +82,14 @@ export async function POST(req: NextRequest) {
     const raw = (completion.text ?? "").trim();
 
     const { body: cleanBody, meta } = extractMeta(raw);
+
+    // raw 가 </meta> 로 끝나지 않으면 응답이 잘렸을 가능성이 큼 → 로그에 표시
+    const truncatedMetaTag = !/<\/meta>\s*$/i.test(raw);
+    logUsage("chat", completion.usageMetadata, {
+      model: DEFAULT_MODEL,
+      ms: Date.now() - startedAt,
+      truncatedMetaTag,
+    });
 
     const advance = !!meta.advance;
     const isComplete = !!meta.isComplete;

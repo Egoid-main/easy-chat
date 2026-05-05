@@ -2,7 +2,8 @@ import type { ChatState } from "@/types";
 import { FIRST_QUESTION_ID } from "./questions";
 
 const STORAGE_KEY = "easy-chat:state:v1";
-const STATE_VERSION = 2;
+// v3: 연구 → 사업계획서로 질문 세트 전면 교체. 구버전 state는 자동 초기화된다.
+const STATE_VERSION = 3;
 
 export function createInitialState(): ChatState {
   const now = Date.now();
@@ -25,7 +26,11 @@ export function loadState(): ChatState {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return createInitialState();
     const parsed = JSON.parse(raw) as Partial<ChatState>;
-    // 누락된 필드를 안전하게 보강 (구버전 → 신버전 마이그레이션)
+    // 버전 불일치 → 질문 세트가 바뀐 상황이므로 깨끗하게 새로 시작.
+    if (parsed.version !== STATE_VERSION) {
+      return createInitialState();
+    }
+    // 누락된 필드를 안전하게 보강
     return {
       ...createInitialState(),
       ...parsed,

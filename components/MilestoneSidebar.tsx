@@ -14,12 +14,14 @@ interface Props {
   onReset: () => void;
 }
 
-const BLOCK_ORDER: BlockId[] = ["A", "B", "C"];
+const BLOCK_ORDER: BlockId[] = ["0", "1", "2", "3", "4"];
 
 const BLOCK_STYLES: Record<BlockId, { dot: string; ring: string; label: string }> = {
-  A: { dot: "bg-blockA", ring: "ring-blockA/40", label: "🟦 A" },
-  B: { dot: "bg-blockB", ring: "ring-blockB/40", label: "🟨 B" },
-  C: { dot: "bg-blockC", ring: "ring-blockC/40", label: "🟩 C" },
+  "0": { dot: "bg-block0", ring: "ring-block0/40", label: "🟦 0" },
+  "1": { dot: "bg-block1", ring: "ring-block1/40", label: "🟨 1" },
+  "2": { dot: "bg-block2", ring: "ring-block2/40", label: "🟩 2" },
+  "3": { dot: "bg-block3", ring: "ring-block3/40", label: "🟪 3" },
+  "4": { dot: "bg-block4", ring: "ring-block4/40", label: "🟧 4" },
 };
 
 export default function MilestoneSidebar({
@@ -41,7 +43,7 @@ export default function MilestoneSidebar({
   return (
     <aside className="w-[280px] shrink-0 border-r border-zinc-200 bg-zinc-50 h-screen overflow-y-auto p-5">
       <h1 className="text-base font-semibold text-zinc-900">
-        연구 사업계획서 작성
+        사업계획서 작성
       </h1>
       <p className="mt-1 text-xs text-zinc-500 leading-relaxed">
         완료된 항목은 클릭해 정리 내용을 확인할 수 있어요.

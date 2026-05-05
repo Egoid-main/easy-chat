@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { DraftRequestBody, DraftResponseBody } from "@/types";
 import { buildDraftSystemPrompt } from "@/lib/prompts";
-import { getGemini, DEFAULT_MODEL } from "@/lib/gemini";
+import { getGemini, DEFAULT_MODEL, logUsage } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const ai = getGemini();
+    const startedAt = Date.now();
     const completion = await ai.models.generateContent({
       model: DEFAULT_MODEL,
       contents: [
@@ -40,12 +41,17 @@ export async function POST(req: NextRequest) {
       ],
       config: {
         systemInstruction,
-        maxOutputTokens: 2000,
+        // 테스트 기간: 실질 무제한. 평균 소비량 측정 후 다시 조정.
+        maxOutputTokens: 8000,
         temperature: 0.4,
       },
     });
 
     const draft = (completion.text ?? "").trim();
+    logUsage("draft", completion.usageMetadata, {
+      model: DEFAULT_MODEL,
+      ms: Date.now() - startedAt,
+    });
     const res: DraftResponseBody = { draft };
     return NextResponse.json(res);
   } catch (err: unknown) {

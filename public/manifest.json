@@ -1,7 +1,7 @@
 {
-  "name": "연구 사업계획서 작성 서포트",
-  "short_name": "연구 계획서",
-  "description": "대화로 연구 사업계획서 초안을 함께 정리해주는 AI 챗봇.",
+  "name": "사업계획서 작성 서포트",
+  "short_name": "사업계획서",
+  "description": "대화로 사업계획서 초안을 함께 정리해주는 AI 챗봇.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

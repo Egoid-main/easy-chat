@@ -8,9 +8,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        blockA: "#3b82f6", // 파랑
-        blockB: "#eab308", // 노랑
-        blockC: "#22c55e", // 초록
+        block0: "#3b82f6", // 파랑 — 사업 아이템 개요
+        block1: "#eab308", // 노랑 — 문제 인식
+        block2: "#22c55e", // 초록 — 실현가능성
+        block3: "#a855f7", // 보라 — 성장 전략
+        block4: "#f97316", // 주황 — 팀 구성
       },
     },
   },

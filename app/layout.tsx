@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "연구 사업계획서 작성 서포트",
+  title: "사업계획서 작성 서포트",
   description:
-    "대화를 통해 연구 사업계획서 초안을 함께 정리해주는 AI 챗봇.",
+    "대화를 통해 사업계획서 초안을 함께 정리해주는 AI 챗봇.",
   manifest: "/manifest.json",
 };
 

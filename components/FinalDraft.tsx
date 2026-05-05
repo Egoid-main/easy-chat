@@ -27,7 +27,7 @@ export default function FinalDraft({ draft, loading, error, onRegenerate }: Prop
       <div className="rounded-2xl border border-zinc-200 bg-white">
         <div className="flex items-center justify-between gap-2 border-b border-zinc-200 px-4 py-3">
           <h2 className="text-sm font-semibold text-zinc-900">
-            연구 사업계획서 초안
+            사업계획서 초안
           </h2>
           <div className="flex gap-2">
             <button

@@ -1,11 +1,11 @@
-export type BlockId = "A" | "B" | "C";
+export type BlockId = "0" | "1" | "2" | "3" | "4";
 
 export interface Question {
-  id: string;            // 예: "A1", "B2"
+  id: string;            // 예: "0-1", "1-2", "4-2"
   block: BlockId;
-  blockTitle: string;    // 예: "연구의 정의 (What·Why)"
+  blockTitle: string;    // 예: "사업 아이템 개요"
   index: number;         // 블록 내 순서 (1-based)
-  title: string;         // 예: "연구 아이템 한 줄 소개"
+  title: string;         // 예: "팀명"
   hint?: string;         // 모델에게 줄 보조 설명 (UI에는 노출 안 함)
 }
 

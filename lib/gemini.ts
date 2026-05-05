@@ -44,3 +44,39 @@ export function extractMeta(raw: string): {
     return { body, meta: {} };
   }
 }
+
+/**
+ * Gemini 응답의 usageMetadata 를 Vercel 로그용 한 줄 JSON 으로 기록한다.
+ * 테스트 기간 동안 라우트별 평균 토큰 소비량을 측정하기 위함.
+ *
+ * 검색 팁: Vercel Logs 에서 `[usage]` 로 grep.
+ *
+ * 필드:
+ *  - prompt: 입력(시스템 프롬프트 + 컨텍스트) 토큰
+ *  - candidates: 사용자에게 보이는 출력 토큰
+ *  - thoughts: Gemini 2.5 thinking 토큰 (가시 출력 X, 비용 발생 O)
+ *  - total: 위 합계 (모델이 직접 보고)
+ *  - cached: 컨텍스트 캐시 적중 토큰 (있을 때만)
+ *  - ms: 호출 소요 시간
+ */
+export function logUsage(
+  route: "chat" | "summary" | "draft",
+  // 어떤 SDK 버전이든 안전하게 받기 위해 unknown 으로 받음
+  usageMetadata: unknown,
+  extra: { model: string; ms: number; truncatedMetaTag?: boolean }
+): void {
+  const u = (usageMetadata ?? {}) as Record<string, number | undefined>;
+  const payload = {
+    route,
+    model: extra.model,
+    prompt: u.promptTokenCount ?? 0,
+    candidates: u.candidatesTokenCount ?? 0,
+    thoughts: u.thoughtsTokenCount ?? 0,
+    total: u.totalTokenCount ?? 0,
+    cached: u.cachedContentTokenCount ?? 0,
+    ms: extra.ms,
+    ...(extra.truncatedMetaTag ? { truncatedMetaTag: true } : {}),
+  };
+  // 한 줄 JSON 으로 출력해야 Vercel Logs 에서 파싱이 쉬움
+  console.log(`[usage] ${JSON.stringify(payload)}`);
+}
